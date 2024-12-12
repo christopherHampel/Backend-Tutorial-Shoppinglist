@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mylist</title>
+
+    <style>
+
+        * {
+            margin: 0;
+        }
+
+        body {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        header {
+            background-color: aqua;
+            padding-left: 24px;
+        }
+
+        button {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+        }
+
+        .list-item {
+            background-color: white;
+            height: 60px;
+            padding-left: 24px;
+            display: flex;
+            align-items: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Meine Einkaufsliste</h1>
+        <button onclick="addItem()">+</button>
+    </header>
+
+    {% for row in all_items %}
+    <div class="list-item">
+        <input type="checkbox">{{ row.name }}
+    </div>
+    {% endfor %}
+
+    <script>
+        function addItem() {
+            let itemName = prompt('Neues Element hinzufügen');
+            let token = '{{ csrf_token }}'
+            let formData = new FormData();
+            formData.append('itemName', itemName);
+            formData.append('csrfmiddlewaretoken', token);
+ 
+            fetch('/mylist/', {
+                method: 'POST',
+                body: formData
+            });
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>
+
